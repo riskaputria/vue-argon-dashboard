@@ -96,10 +96,10 @@
               </div>
             </div>
             <div class="card-body">
-              <form role="form">
+              <form @submit.prevent="createUser">
                 <argon-input type="text" placeholder="Name" aria-label="Name" />
-                <argon-input type="email" placeholder="Email" aria-label="Email" />
-                <argon-input type="password" placeholder="Password" aria-label="Password" />
+                <argon-input placeholder="username" name="username" size="lg" v-model="username" />
+                 <argon-input type="password" placeholder="Password" name="password" size="lg" v-model="password" />
                 <argon-checkbox checked>
                   <label class="form-check-label" for="flexCheckDefault">
                     I agree the
@@ -145,6 +145,20 @@ export default {
     ArgonInput,
     ArgonCheckbox,
     ArgonButton,
+  },
+  data: ()  => {
+    return {
+      username: 'riskaputri',
+      password: 'riska226'
+    };
+  },
+  methods: {
+    createUser() {
+      const username = this.username;
+      const password = this.password;
+      this.username = '';
+      this.password = '';
+    }
   },
   created() {
     this.$store.state.hideConfigButton = true;

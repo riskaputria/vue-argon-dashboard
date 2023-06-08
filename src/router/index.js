@@ -13,7 +13,7 @@ router.beforeEach((to, from, next) => {
   const { id } = certCookies();
   if (to.matched.some(({ meta }) => meta.auth) && !id) {
     next({ name: "Signin" });
-  } else if (to.matched.some(({ path }) => path.includes("auth"))) {
+  } else if (to.matched.some(({ path }) => path.includes("auth")) && id) {
     next({ name: "Default" });
   } else {
     next();
