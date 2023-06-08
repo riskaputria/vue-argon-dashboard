@@ -96,10 +96,10 @@
               </div>
             </div>
             <div class="card-body">
-              <form @submit.prevent="createUser">
-                <argon-input type="text" placeholder="Name" aria-label="Name" />
-                <argon-input placeholder="username" name="username" size="lg" v-model="username" />
-                 <argon-input type="password" placeholder="Password" name="password" size="lg" v-model="password" />
+              <form @submit.prevent="submitregister">
+                <argon-input type="text" placeholder="name" v-model="input.name" />
+                <argon-input placeholder="username" name="username" size="lg" v-model="input.username" />
+                 <argon-input type="password" placeholder="password" name="password" size="lg" v-model="input.password" />
                 <argon-checkbox checked>
                   <label class="form-check-label" for="flexCheckDefault">
                     I agree the
@@ -110,7 +110,7 @@
                   </label>
                 </argon-checkbox>
                 <div class="text-center">
-                  <argon-button fullWidth color="dark" variant="gradient" class="my-4 mb-2">Sign up</argon-button>
+                  <argon-button fullWidth color="dark" variant="gradient" class="my-4 mb-2" type="submit">Sign up</argon-button>
                 </div>
                 <p class="text-sm mt-3 mb-0">
                   Already have an account?
@@ -130,6 +130,8 @@
 </template>
 
 <script>
+import { mapActions } from 'pinia';
+import d$auth from '@/stores/auth';
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import AppFooter from "@/examples/PageLayout/Footer.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
@@ -146,19 +148,24 @@ export default {
     ArgonCheckbox,
     ArgonButton,
   },
-  data: ()  => {
-    return {
-      username: 'riskaputri',
-      password: 'riska226'
-    };
-  },
+  data: () => ({
+    // Input
+    input: {
+      name: '',
+      username: '',
+      password: '',
+    },
+  }),
   methods: {
-    createUser() {
-      const username = this.username;
-      const password = this.password;
-      this.username = '';
-      this.password = '';
-    }
+    ...mapActions(d$auth, ['a$register']),
+    async submitregister() {
+      try {
+        await this.a$register({ ... this.input });
+        this.$router.replace({ name: 'Signin' });
+      } catch (e) {
+        console.error(e);
+      }
+    },
   },
   created() {
     this.$store.state.hideConfigButton = true;
